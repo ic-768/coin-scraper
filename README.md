@@ -1,1 +1,1 @@
-An extremely basic scraper built in 20 minutes to help a friend scrape some crypto data.
+An extremely basic program built to help a friend periodically scrape some crypto data.
