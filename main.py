@@ -2,18 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def scrapeCoinSite(coin):
+def scrapeCoinSite(coin: str):
     serverData = requests.get(f"https://coinmarketcap.com/currencies/{coin}").content
     parsedHTML = BeautifulSoup(serverData, "html.parser")
+    get = parsedHTML.select_one
 
     elements = {}
-    elements["priceValue"] = parsedHTML.select_one("div.priceValue")
-    elements["upOrDownParent"] = parsedHTML.select_one("span.feeyND")
-    if elements["upOrDownParent"] is None:
-        elements["upOrDownParent"] = parsedHTML.select_one("span.gEePkg")
-    elements["lowValue"] = parsedHTML.select_one("div.lipEFG")
-    elements["highValue"] = parsedHTML.select_one("div.SjVBR")
-    elements["statsValue"] = parsedHTML.select_one("div.statsValue")
+    elements["Price"] = get("div.priceValue")
+    elements["UpOrDown"] = get("span.feeyND") or get("span.gEePkg")
+    elements["Low"] = get("div.lipEFG")
+    elements["High"] = get("div.SjVBR")
+    elements["Stats"] = get("div.statsValue")
 
     print(coin)
     for _, value in elements.items():
@@ -22,5 +21,6 @@ def scrapeCoinSite(coin):
 
 
 coins = ["bitcoin", "ethereum", "cardano", "polygon", "chainlink", "uniswap"]
+
 for each in coins:
     scrapeCoinSite(each)
