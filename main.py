@@ -1,4 +1,5 @@
 import requests
+import threading
 from bs4 import BeautifulSoup
 
 
@@ -14,13 +15,9 @@ def scrapeCoinSite(coin: str):
     elements["High"] = get("div.SjVBR")
     elements["Stats"] = get("div.statsValue")
 
-    print(coin)
-    for _, value in elements.items():
-        print(value.text)
-    print("\n")
+    print(coin, [[i, e.text] for i, e in elements.items()])
 
 
 coins = ["bitcoin", "ethereum", "cardano", "polygon", "chainlink", "uniswap"]
 
-for each in coins:
-    scrapeCoinSite(each)
+[threading.Thread(target=scrapeCoinSite, args=(c,)).start() for c in coins]
